@@ -1,4 +1,4 @@
-// Countdown + confetti + music autoplay for hosted version
+// Countdown + confetti + music autoplay for hosted or local test
 
 const countdown = document.getElementById("countdown");
 const surprise = document.getElementById("surprise");
@@ -6,19 +6,16 @@ const music = document.getElementById("bg-music");
 const playBtn = document.getElementById("play-btn");
 const confettiCanvas = document.getElementById("confetti");
 
-// Countdown target: Oct 31, 2025 at 12:05 AM
-const targetDate = new Date("Oct 31, 2025 00:05:00").getTime();
+// 🎯 Countdown target: 5 seconds from now (for testing)
+const targetDate = Date.now() + 5000;
 
 const timer = setInterval(() => {
   const now = Date.now();
   const diff = targetDate - now;
 
   if (diff > 0) {
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-    countdown.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    const seconds = Math.ceil(diff / 1000);
+    countdown.textContent = `${seconds}s`;
   } else {
     clearInterval(timer);
     document.getElementById("countdown-section").style.display = "none";
@@ -26,13 +23,13 @@ const timer = setInterval(() => {
     startConfetti();
     tryAutoPlay();
   }
-}, 1000);
+}, 500);
 
 function tryAutoPlay() {
   const playPromise = music.play();
   if (playPromise !== undefined) {
     playPromise.then(() => {
-      console.log("Autoplay success");
+      console.log("Autoplay success 🎶");
     }).catch(() => {
       playBtn.style.display = "inline-block";
     });
@@ -44,7 +41,7 @@ playBtn.addEventListener("click", () => {
   startConfetti();
 });
 
-// Confetti
+// 💥 Confetti animation
 const ctx = confettiCanvas.getContext("2d");
 let confetti = [];
 
